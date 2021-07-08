@@ -35,10 +35,15 @@ describe("renames", () => {
 		fs.renameSync(fsPath(originalFileUri), fsPath(fixedFileUri));
 		await waitUntilAllTextDocumentsAreClosed();
 		await openFile(fixedFileUri);
-		await delay(200); // Allow time for the diagnostic to come back (if it will).
+		await delay(500); // Allow time for the diagnostic to come back (if it will).
+
+		// TODO: This fails because the diagnostics don't appear to be cleared correctly. This may be due to server, but
+		// have requested some clarification here: https://github.com/microsoft/vscode/issues/128198
+		throw "FIXME";
 
 		// Ensure error disappears.
 		await waitForResult(() => vs.languages.getDiagnostics(originalFileUri).length === 0, "Error should have disappeared");
+		await waitForResult(() => vs.languages.getDiagnostics(fixedFileUri).length === 0, "Error should have disappeared");
 	});
 
 });
